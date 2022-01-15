@@ -1,0 +1,17 @@
+[package]
+name = "rusty-bicycle"
+version = "0.1.0"
+authors = ["kranex", "maxverbeek"]
+edition = "2018"
+
+# See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
+
+[dependencies]
+btleplug = "0.9.1"
+futures = "0.3.19"
+log = "0.4.14"
+pretty_env_logger = "0.4.0"
+rand = "0.8.4"
+structopt = "0.3.25"
+tokio = { version = "1.15.0", features = ["full"] }
+uuid = "0.8.2"

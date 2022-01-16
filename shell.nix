@@ -2,6 +2,6 @@
 
 pkgs.mkShell rec {
   propagatedBuildInputs = with pkgs; [
-    cargo cargo-edit rustc dbus pkgconfig
+    cargo cargo-edit rustc rustfmt dbus pkgconfig
   ];
 }

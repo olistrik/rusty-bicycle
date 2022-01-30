@@ -11,7 +11,7 @@ use uuid::Uuid;
 #[repr(u16)]
 #[derive(Clone, Copy, Debug, Eq, PartialEq, IntEnum)]
 pub enum FitnessService {
-    GenericAttribute   =  0x1801,
+    GenericAttribute    = 0x1801,
     DeviceInformation   = 0x180A,
     FitnessMachine      = 0x1826,
     RunningSpeedCadence = 0x1814,
@@ -22,7 +22,7 @@ pub enum FitnessService {
 impl FitnessService {
     pub fn name(&self) -> &str {
         match self {
-            FitnessService::GenericAttribute   => return "Generic Attribute",
+            FitnessService::GenericAttribute    => return "Generic Attribute",
             FitnessService::DeviceInformation   => return "Device Information",
             FitnessService::FitnessMachine      => return "Fitness Machine",
             FitnessService::RunningSpeedCadence => return "Running Speed and Cadence",

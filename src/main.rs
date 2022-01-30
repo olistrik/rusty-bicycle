@@ -14,7 +14,7 @@ use futures::stream::StreamExt;
 
 use log::LevelFilter;
 
-
+use uuid::Uuid;
 use services::FitnessService;
 use characteristics::FitnessCharacteristic;
 
@@ -37,6 +37,10 @@ enum Command {
         #[structopt(long)]
         /// Don't filter non-fitness machines from the scan results.
         no_filter: bool,
+
+        #[structopt(long)]
+        /// Filter devices by the given service uuid.
+        filter: Option<Uuid>,
     },
 
     Debug {
@@ -65,7 +69,7 @@ async fn get_central() -> Result<Adapter, Box<dyn Error>> {
     return Ok(central);
 }
 
-async fn list_devices(no_filter: bool) -> Result<(), Box<dyn Error>> {
+async fn list_devices(no_filter: bool, filter: Option<Uuid>) -> Result<(), Box<dyn Error>> {
     let central = get_central().await?;
     let mut events = central.events().await?;
 
@@ -73,10 +77,13 @@ async fn list_devices(no_filter: bool) -> Result<(), Box<dyn Error>> {
 
     let scan_filter;
 
+    let unwrapped_filter = filter.unwrap_or(FitnessService::FitnessMachine.uuid());
+
     if no_filter {
         scan_filter = ScanFilter::default();
     } else {
-        scan_filter = ScanFilter { services: vec![FitnessService::FitnessMachine.uuid()] };
+        println!("filter: {}", unwrapped_filter);
+        scan_filter = ScanFilter { services: vec![unwrapped_filter] };
     }
 
     central.start_scan(scan_filter).await?;
@@ -177,7 +184,7 @@ async fn main() -> Result<(), Box<dyn Error>> {
     // time::sleep(Duration::from_secs(10)).await;
 
     match opt.cmd {
-        Command::Scan { no_filter }  => list_devices(no_filter).await?,
+        Command::Scan { no_filter, filter }  => list_devices(no_filter, filter).await?,
         Command::Debug { device, cmd } => {
             match cmd {
                 Debug::Services {} => debug_services(device).await?,
